@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/autolimbus.iml" filepath="$PROJECT_DIR$/.idea/autolimbus.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/IrisAutoLimbus.iml" filepath="$PROJECT_DIR$/.idea/IrisAutoLimbus.iml" />
     </modules>
   </component>
 </project>

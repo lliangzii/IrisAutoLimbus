@@ -1,6 +1,4 @@
 import logging
-from multiprocessing.util import DEBUG
-
 import colorlog
 
 def get_logger(config_level):
