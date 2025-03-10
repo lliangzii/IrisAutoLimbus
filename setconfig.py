@@ -13,21 +13,13 @@ default_config = {
         "level": "DEBUG",
         "version": "1.1",
         "settings": {
-            "theme": "dark",
-            "notifications": "true"
+            "language": ""
         }
     },
     "information": {
-        "auther": "liangzi",
+        "author": "liangzi",
         "version": "0.1.1"
-    },
-    "users": [
-        {
-            "id": 1,
-            "name": "Alice",
-            "roles": ["admin", "editor"]
-        }
-    ]
+    }
 }
 
 
@@ -35,11 +27,11 @@ def load_config():
 
     """加载配置文件，如果文件不存在则创建默认配置"""
     if os.path.exists(config_path):
-        logger.info('已加载配置文件 config.json')
+        logger.info('已加载配置文件:config.json')
         with open(config_path, 'r', encoding='utf-8') as f:
             config = json.load(f)
     else:
-        logger.warning('未找到配置文件 config.json，生成默认配置...')
+        logger.warning('未找到配置文件:config.json，生成默认配置...')
         # 如果配置文件不存在，使用默认配置并创建文件
         with open(config_path, 'w', encoding='utf-8') as f:
             json.dump(default_config, f, indent=4)
@@ -51,16 +43,4 @@ def save_config(config):
     """保存更新后的配置文件"""
     with open(config_path, 'w', encoding='utf-8') as f:
         json.dump(config, f, indent=4)
-    logger.debug('配置文件已更新喵 config.json')
-
-# 加载配置文件
-# config = load_config()
-#
-# # 示例：修改配置中的某个值
-# config['setting1'] = "new_value"
-#
-# # 保存更新后的配置
-# save_config(config)
-#
-
-
+    logger.debug('配置文件:config.json 已更新 ')
