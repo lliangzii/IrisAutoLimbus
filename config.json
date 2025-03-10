@@ -1,20 +1,9 @@
 {
     "logging": {
-        "level": "DEBUG",
-        "version": "1.1",
-        "settings": {
-            "theme": "dark",
-            "notifications": "true"
-        }
+        "level": "DEBUG"
     },
-    "users": [
-        {
-            "id": 1,
-            "name": "Alice",
-            "roles": [
-                "admin",
-                "editor"
-            ]
-        }
-    ]
+    "information": {
+        "auther": "liangzi",
+        "version": "0.1.1"
+    }
 }
