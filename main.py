@@ -1,3 +1,5 @@
+from time import sleep
+
 from logger import get_logger
 from setconfig import load_config
 from setconfig import save_config
@@ -39,6 +41,7 @@ def function_choose():
             return
         else:
             logger.error("错误的输入! 请重新输入。")
+
 def set_log_level():
     """设置信息显示级别"""
     logger.info("选择日志级别：(在控制台输入对应数字)")
@@ -49,11 +52,13 @@ def set_log_level():
         choice = input()
         languages = {"1": "DEBUG", "2": "INFO"}
         if choice == "0":
+            logger.info('======================================================')
             return  # 返回上一级菜单
         elif choice in languages:
             logger.info(f"日志级别已设置为 {languages[choice]}")
             config["logging"]["settings"]["language"] = languages[choice]
             save_config(config)
+            logger.info('======================================================')
             return
         else:
             logger.error("错误的输入! 请重新输入。")
@@ -68,18 +73,20 @@ def set_language():
         choice = input()
         languages = {"1": "cn", "2": "en"}
         if choice == "0":
+            logger.info('======================================================')
             return  # 返回上一级菜单
         elif choice in languages:
             logger.info(f"游戏语言已设置为 {languages[choice]}")
             config["logging"]["settings"]["language"] = languages[choice]
             save_config(config)
+            logger.info('======================================================')
             return
         else:
             logger.error("错误的输入! 请重新输入。")
 def software_setting():
     """软件配置主菜单"""
     while True:
-        logger.info("正在进行软件配置！(在控制台输入对应数字)")
+        logger.info("正在进行[软件配置](在控制台输入对应数字)")
         logger.info("0-返回")
         logger.info("1-信息显示级别")
         logger.info("2-游戏内语言设置")
@@ -87,6 +94,7 @@ def software_setting():
         choice = input()
 
         if choice == "0":
+            logger.info('======================================================')
             return  # 退出设置
         elif choice == "1":
             set_log_level()  # 进入日志级别设置
@@ -100,7 +108,10 @@ if __name__ == '__main__':
     config = load_config()
     logger = get_logger(config["logging"]["level"])
     init_config()
-    function_choose()
+    # function_choose()
 
     limbus_window = entermirror.connect_bus()
-    # entermirror.click_img(window=limbus_window,image_path='./icon/test02.png')
+    entermirror.click_img(window=limbus_window, image_path='img/driver.png')
+    sleep(.5)
+    entermirror.click_img(window=limbus_window, image_path='img/main_mirror.png')
+
