@@ -3,6 +3,7 @@ import colorlog
 import os
 from datetime import datetime
 
+# 获取日志输出器
 def get_logger(config_level):
     logger = logging.getLogger("app")  # 使用模块级 logger
     if logger.hasHandlers():  # 避免重复添加 handler

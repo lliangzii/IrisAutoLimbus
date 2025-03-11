@@ -1,0 +1,3 @@
+# created by virtualenv automaticall
+*.log
+test*.py
