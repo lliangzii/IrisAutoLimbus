@@ -79,9 +79,8 @@ class GameManager:
         """
         在窗口区域内截屏并查找模板图片的位置
         """
-        rect = self.get_window_rect()
+        rect = self.get_window_rect()  # (left, top, right, bottom)
         screenshot = ImageGrab.grab(bbox=rect)
-        screenshot.show()  # 可用于调试时预览截图
         screenshot = np.array(screenshot)
         screenshot = cv2.cvtColor(screenshot, cv2.COLOR_RGB2BGR)
 
@@ -89,10 +88,23 @@ class GameManager:
         result = cv2.matchTemplate(screenshot, template, cv2.TM_CCOEFF_NORMED)
         _, max_val, _, max_loc = cv2.minMaxLoc(result)
 
-        if max_val > 0.9:  # 设定匹配阈值
-            x, y = max_loc
-            self.logger.debug(f'记录坐标为 {x},{y}')
-            return x, y
+        if max_val > 0.9:  # 匹配阈值
+            # 获取客户区左上角在屏幕上的坐标
+            client_pt = win32gui.ClientToScreen(self.hwnd, (0, 0))
+            offset_x = client_pt[0] - rect[0]
+            offset_y = client_pt[1] - rect[1]
+
+            # 调整匹配到的坐标
+            x_adjusted = max_loc[0] - offset_x
+            y_adjusted = max_loc[1] - offset_y
+
+            # 如果需要点击控件中心，则加上模板的一半宽高
+            h, w = template.shape[:2]
+            x_center = x_adjusted + w // 2
+            y_center = y_adjusted + h // 2
+
+            self.logger.debug(f'记录坐标为 {x_center},{y_center}')
+            return x_center, y_center
         return None
 
     def click_img(self, image_path):
@@ -111,23 +123,40 @@ class GameManager:
             self.logger.warning("无法找到元素位置")
 
     def auto_fighting(self):
-        """
-        自动战斗逻辑，根据不同的图片状态执行对应的点击和等待操作
-        """
+        # 定义图片路径
+        path_a = './img/startTurn_yet.png'
+        path_b = './img/startTurn.png'
+        path_c = './img/wait_fighting.png'
+        path_d = './img/dante_inMirror.png'
+
         while True:
-            if self.find_image('./img/startTurn_yet.png') is not None:
+            # 检查终止条件：出现 d 时退出循环
+            if self.find_image(path_d):
+                break
+
+            # 如果存在 a，则点击 P.png 并等待
+            if self.find_image(path_a):
                 self.click_img('./img/P.png')
                 sleep(1)
-            if self.find_image('./img/startTurn.png') is not None:
-                self.click_img('./img/startTurn.png')
+                continue
+
+            # 如果存在 b，则点击 startTurn.png 并等待
+            if self.find_image(path_b):
+                self.click_img(path_b)
                 sleep(1)
-            if self.find_image('./img/wait_fighting.png') is not None:
+                continue
+
+            # 如果存在 c，则进入较长的等待状态（加载状态）
+            if self.find_image(path_c):
                 sleep(30)
-            if self.find_image('./img/dante_inMirror.png') is not None:
-                return
+                continue
+
+            # 若以上图像均未出现，则稍作等待后重试
+            sleep(1)
+
 
 # 示例：如何使用这个类
-if __name__ == '__main__':
-    gm = GameManager()
-    gm.connect_bus()  # 连接游戏窗口
-    gm.auto_fighting()
+# if __name__ == '__main__':
+#     gm = GameManager()
+#     gm.connect_bus()  # 连接游戏窗口
+#     gm.auto_fighting()
